@@ -2,98 +2,136 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Payment Agreement Contract</title>
+<title>Final Investment Withdrawal Deed</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 40px;
-        color: #333;
+    body { font-family: "Times New Roman", serif; margin:0; background:#f4f4f4; }
+    .page {
+        width:800px; margin:40px auto; padding:60px;
+        background:white; box-shadow:0 0 15px rgba(0,0,0,0.15);
+        position:relative; page-break-after:always;
     }
-    .container {
-        max-width: 800px;
-        margin: auto;
-        padding: 30px;
-        border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    .watermark {
+        position:absolute; top:40%; left:20%;
+        font-size:80px; color:rgba(200,0,0,0.08);
+        transform:rotate(-30deg); font-weight:bold;
     }
-    h1 {
-        text-align: center;
+    .logo { text-align:center; margin-bottom:20px; }
+    h1 { text-align:center; font-size:36px; }
+    .badge {
+        text-align:center; font-weight:bold; color:white;
+        background:black; padding:8px 18px;
+        display:inline-block; margin:15px auto;
     }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    table, th, td {
-        border: 1px solid #000;
-    }
-    th, td {
-        padding: 10px;
-        text-align: left;
-    }
-    .total {
-        font-size: 18px;
-        font-weight: bold;
-        margin-top: 20px;
-    }
-    .section {
-        margin-top: 25px;
-    }
-    .signature {
-        margin-top: 50px;
+    .section { margin-top:22px; line-height:1.7; font-size:15px; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    table, th, td { border:1px solid black; }
+    th, td { padding:10px; }
+    .signature-line { margin-top:40px; border-top:1px solid black; width:65%; padding-top:5px; }
+    .btn {
+        margin-top:15px; padding:10px 18px;
+        background:black; color:white; border:none; cursor:pointer;
     }
 </style>
+<script>
+function submitSignature(){
+    const date = new Date().toLocaleDateString();
+    document.getElementById("sigdate").innerText = date;
+    alert("Acknowledged. Contract recorded on " + date);
+}
+</script>
 </head>
 <body>
 
-<div class="container">
-    <h1>Payment Agreement Contract</h1>
-
-    <div class="section">
-        This Payment Agreement ("Agreement") is made between the undersigned parties regarding the payment obligation described below. This document serves as a formal contract confirming the billing and payment terms.
-    </div>
-
-    <div class="section">
-        <strong>Bill To:</strong><br>
-        Gary and Rita Thomas<br>
-        101 W Palma Dr<br>
-        Green Valley, AZ 85614-4214
-    </div>
-
-    <table>
-        <tr>
-            <th>Description</th>
-            <th>Amount (USD)</th>
-        </tr>
-        <tr>
-            <td>Services Rendered (as agreed)</td>
-            <td>$773,460.00</td>
-        </tr>
-    </table>
-
-    <div class="total">
-        Total Amount Due: $773,460.00<br>
-        Amount in Words: Seven Hundred Seventy-Three Thousand Four Hundred Sixty Dollars Only.
-    </div>
-
-    <div class="section">
-        <strong>Payment Instructions:</strong><br>
-        Bank Name: American Express (Amex)<br>
-        Account Number: 400214183719<br>
-        Routing Number: 124303243
-    </div>
-
-    <div class="section">
-        <strong>Processing Timeline:</strong><br>
-        The deposit of <strong>$773,460.00</strong> is expected to be processed within <strong>2–3 weeks</strong> from the date of this Agreement.
-    </div>
-
-    <div class="signature">
-        Authorized Signature: ___________________________<br><br>
-        Printed Name: _________________________________<br><br>
-        Date: _______________
-    </div>
+<!-- PAGE 1 COVER -->
+<div class="page">
+<div class="watermark">CONFIDENTIAL</div>
+<div class="logo">
+<img src="https://via.placeholder.com/120x120?text=LOGO">
+</div>
+<h1>FINAL INVESTMENT WITHDRAWAL DEED</h1>
+<div style="text-align:center;">
+<div class="badge">OFFICIAL CONTRACT DOCUMENT</div>
+</div>
+<div class="section" style="text-align:center; margin-top:80px;">
+This legal instrument constitutes a binding Investment Withdrawal Deed confirming the authorized release of investment funds under enforceable contractual terms.
+</div>
 </div>
 
-</body>
-</html>
+<!-- PAGE 2 MAIN CONTRACT -->
+<div class="page">
+
+<div class="section"><strong>Contract Date:</strong> February 3, 2026</div>
+
+<div class="section">
+This Agreement formalizes the withdrawal of funds between the Client and the undersigned Guarantor.
+</div>
+
+<div class="section">
+<strong>Sent To:</strong><br>
+Gary and Rita Thomas<br>
+101 W Palma Dr<br>
+Green Valley, AZ 85614-4214
+</div>
+
+<div class="section"><strong>Guarantor:</strong> Justin Utz Eugene</div>
+
+<table>
+<tr><th>Description</th><th>Amount (USD)</th></tr>
+<tr><td>Investment Withdrawal Deed</td><td>$773,460.00</td></tr>
+</table>
+
+<div class="section">
+<strong>Processing Timeline:</strong> Funds processed within 2–3 weeks of execution.
+</div>
+
+<div class="section">
+<strong>Late Fee Clause:</strong> Delays beyond stated processing time may incur penalties permitted under governing regulations.
+</div>
+
+<div class="section">
+<strong>Confidentiality:</strong> All financial and contractual information remains confidential.
+</div>
+
+<div class="section">
+<strong>Governing Law:</strong> State of Arizona.
+</div>
+
+<div class="section">
+<strong>Payment Instructions:</strong><br>
+Bank Name: American Express (Amex)<br>
+Account Number: 400214183719<br>
+Routing Number: 124303243
+</div>
+
+<div class="signature-line">Client Signature: Gary & Rita Thomas</div>
+<div class="signature-line">Guarantor Signature: Justin Utz Eugene</div>
+
+</div>
+
+<!-- PAGE 3 FEE DETAILS -->
+<div class="page">
+
+<h1 style="font-size:26px;">Fee Details & Withdrawal Calculations</h1>
+
+<div class="section"><strong>Total Investment Account Balance:</strong> $740,000</div>
+
+<table>
+<tr><th>Fee Type</th><th>Explanation</th><th>Amount</th></tr>
+<tr>
+<td>Withdrawal Fee</td>
+<td>1.2% of total investment balance</td>
+<td>$8,800</td>
+</tr>
+<tr>
+<td>V.A.T</td>
+<td>0.2% of withdrawal fee</td>
+<td>$1,760</td>
+</tr>
+<tr>
+<td>Processing Fee</td>
+<td>Administrative processing charge (already paid)</td>
+<td>$500</td>
+</tr>
+</table>
+
+<div class="section">
