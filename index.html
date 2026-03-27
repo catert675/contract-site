@@ -3,93 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Client Portal</title>
+<title>Legal Document Portal</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600;700&family=Inter:wght@400;500&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<!-- PDF libs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body {margin:0; font-family:Inter; background:#f4efe6;}
+body {margin:0;background:#eaeaea;font-family:'EB Garamond', serif;}
 
 /* LOGIN */
 #login {
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1600') center/cover;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+  url('https://images.unsplash.com/photo-1562564055-71e051d33c19?q=80&w=1600') center/cover;
 }
-
 .login-box {
-background:white;
-padding:40px;
-border-radius:12px;
-width:300px;
-text-align:center;
+  background:white;
+  padding:40px;
+  border-radius:10px;
+  width:300px;
+  text-align:center;
+  font-family:Inter;
 }
-
 input {width:100%; padding:10px; margin-top:10px;}
-
-button {
-width:100%;
-padding:10px;
-margin-top:10px;
-background:#2f3e52;
-color:white;
-border:none;
-cursor:pointer;
-}
+button {width:100%; padding:10px; margin-top:10px; background:#1f2a38; color:white; border:none; cursor:pointer;}
+button.small {width:auto; padding:10px 16px; margin:0 6px;}
 
 /* CONTENT */
-#content {display:none; padding:20px;}
-
+#content {display:none; padding:30px;}
 .page {
-display:none;
-background:white;
-padding:30px;
-max-width:850px;
-margin:auto;
-border-radius:10px;
+  display:none;
+  background:white;
+  max-width:900px;
+  margin:auto;
+  padding:60px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  position:relative;
 }
-
 .page.active {display:block;}
 
-.progress {
-text-align:center;
-margin-bottom:10px;
-color:#2f3e52;
+/* STAMP + SEAL */
+.stamp {
+  position:absolute;
+  top:40%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-25deg);
+  font-size:70px;
+  color:rgba(180,0,0,0.15);
+  border:4px solid rgba(180,0,0,0.2);
+  padding:10px 30px;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+.seal {
+  position:absolute;
+  bottom:40px;
+  right:40px;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  border:3px solid gold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  text-align:center;
+  color:gold;
+  opacity:0.85;
 }
 
-.section-title {
-font-size:13px;
-text-transform:uppercase;
-margin-top:20px;
-font-weight:600;
-color:#2f3e52;
+/* HEADER */
+.header {
+  text-align:center;
+  border-bottom:2px solid black;
+  padding-bottom:15px;
+  margin-bottom:25px;
+}
+.header h1 {margin:0;font-size:30px;}
+.header p {font-family:Inter;font-size:12px;margin:6px 0 0;}
+
+/* TEXT */
+.clause {margin-bottom:12px; line-height:1.6;}
+.clause-title {font-weight:700; margin-top:20px;}
+
+/* TABLE */
+table {width:100%; border-collapse:collapse; margin-top:15px;}
+th, td {border:1px solid #333; padding:10px;}
+th {background:#f2f2f2;}
+
+/* SIGNATURE */
+.signature {font-family:'Great Vibes', cursive; font-size:28px; margin-top:10px;}
+
+/* FOOTER */
+.footer {
+  margin-top:30px;
+  border-top:1px solid #999;
+  padding-top:10px;
+  font-family:Inter;
+  font-size:12px;
+  display:flex;
+  justify-content:space-between;
 }
 
-.doc-table {
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-}
-
-.doc-table th {
-background:#2f3e52;
-color:white;
-padding:10px;
-}
-
-.doc-table td {
-border:1px solid #ddd;
-padding:10px;
-}
-
-.nav {margin-top:20px;}
-.nav button {width:auto; margin-right:10px;}
-
-h1 {font-family:"Cormorant Garamond";}
-
+/* NAV + PROGRESS */
+.nav {margin-top:20px; text-align:center;}
+.progress {text-align:center; margin-bottom:10px; font-family:Inter;}
+.topbar {text-align:center; margin-bottom:20px;}
 </style>
 </head>
 
@@ -97,89 +122,239 @@ h1 {font-family:"Cormorant Garamond";}
 
 <!-- LOGIN -->
 <div id="login">
-<div class="login-box">
-<h2>Confidential Access Required</h2>
-<input id="u" placeholder="Username">
-<input id="p" type="password" placeholder="Password">
-<button onclick="login()">Access Secure Document</button>
-<p id="error"></p>
-</div>
+  <div class="login-box">
+    <h2>Confidential Access</h2>
+    <input id="u" placeholder="Username">
+    <input id="p" type="password" placeholder="Password">
+    <button onclick="login()">Access</button>
+    <p id="error" style="color:#b00020;"></p>
+  </div>
 </div>
 
 <!-- CONTENT -->
 <div id="content">
 
-<div class="progress" id="step">Step 1 of 3</div>
+  <div class="progress" id="step">Step 1 of 4</div>
 
-<!-- PAGE 1 -->
-<div class="page active">
-<h1>Acknowledgment</h1>
-<p>This document is presented for review and acknowledgment.</p>
-<button onclick="next()">Next →</button>
-</div>
+  <div class="topbar">
+    <button class="small" onclick="downloadPDF()" style="background:#0b3d2e;">
+      📄 Download Full Document (PDF)
+    </button>
+  </div>
 
-<!-- PAGE 2 -->
-<div class="page">
-<h1>FINAL INVESTMENT WITHDRAWAL DEED</h1>
-<p>Date: February 3, 2026</p>
+  <!-- PAGE 1 -->
+  <div class="page active">
+    <div class="stamp">CONFIDENTIAL</div>
+    <div class="seal">LEGAL<br>SEAL</div>
 
-<hr>
+    <div class="header">
+      <h1>Honigman Attorneys and Counselors LLP</h1>
+      <p>https://www.honigman.com/</p>
+    </div>
 
-<div class="section-title">BILL TO</div>
-Gary rita Thomas<br>
-[Insert Address]
+    <p class="clause">
+      This legal instrument is issued under professional oversight to formalize and regulate the structured investment withdrawal process.
+      The administering counsel maintains neutrality and a duty of care to both the Investor and the Investee, ensuring fair and compliant handling of all matters.
+    </p>
 
-<hr>
+    <p class="clause">
+      All documentation, communications, and financial records are maintained under strict confidentiality and secure handling protocols.
+    </p>
 
-<div class="section-title">SERVICE DETAILS</div>
+    <h3>TERMS, CONDITIONS & LEGAL PROVISIONS</h3>
 
-<table class="doc-table">
-<tr><th>Description</th><th>Amount</th></tr>
-<tr><td>Investment Withdrawal</td><td>$773,460.00</td></tr>
-</table>
+    <p><strong>1. DEFINITIONS</strong><br>
+      1.1 “Company” refers to Wright Groups of Company LLC.<br>
+      1.2 “Invoice” refers to this billing document.<br>
+      1.3 “Recipient” refers to the addressed party.
+    </p>
 
-<div class="nav">
-<button onclick="prev()">← Back</button>
-<button onclick="next()">Next →</button>
-</div>
-</div>
+    <p><strong>2. BILLING AUTHORITY</strong><br>
+      2.1 Issued pursuant to internal records.<br>
+      2.2 Reflects obligations within financial ledger.
+    </p>
 
-<!-- PAGE 3 -->
-<div class="page">
-<h1>FINAL INVESTMENT WITHDRAWAL DEED</h1>
-<p>Date: March 27, 2026</p>
+    <p><strong>3. PAYMENT PROCESSING</strong><br>
+      3.1 Subject to banking timelines.<br>
+      3.2 May require verification and review.
+    </p>
 
-<hr>
+    <p><strong>4. REGULATORY COMPLIANCE</strong><br>
+      4.1 Subject to AML and KYC regulations.
+    </p>
 
-<div class="section-title">BILL TO</div>
-Gary rita Thomas<br>
-[Insert Address]
+    <p><strong>5. REPRESENTATIONS</strong><br>
+      5.1 Billing statement only.<br>
+      5.2 Not a financial guarantee.
+    </p>
 
-<hr>
+    <p><strong>6. INDEMNIFICATION</strong><br>
+      6.1 Protection against misuse.
+    </p>
 
-<div class="section-title">WITHDRAWAL SUMMARY</div>
+    <p><strong>7. FORCE MAJEURE</strong><br>
+      7.1 No liability for uncontrollable events.
+    </p>
 
-<p><strong>$849,479.00</strong><br>
-(Eight Hundred Forty-Nine Thousand Four Hundred Seventy-Nine Dollars Only)</p>
+    <p><strong>8. CONFIDENTIALITY</strong><br>
+      8.1 Confidential to recipient only.
+    </p>
 
-<p><strong>Processing Timeline:</strong> 7 Business Days</p>
+    <p><strong>9. GOVERNING LAW</strong><br>
+      9.1 Applicable commercial law.
+    </p>
 
-<hr>
+    <p><strong>10. ENTIRE UNDERSTANDING</strong><br>
+      10.1 Does not override prior agreements.
+    </p>
 
-<div class="section-title">FEE BREAKDOWN</div>
+    <hr>
 
-<table class="doc-table">
-<tr><th>Item</th><th>Amount</th></tr>
-<tr><td>International Withdrawal Fee</td><td>$4,247.395</td></tr>
-<tr><td>VAT</td><td>$2,123.50</td></tr>
-<tr><td>Processing Fee</td><td>Null</td></tr>
-<tr><td>Interest</td><td>$1,129.50</td></tr>
-</table>
+    <h3>AUTHORIZED CORPORATE EXECUTION</h3>
+    <p>Authorized Signature:</p>
+    <div class="signature">Justin Utz Eugene</div>
+    <p>Printed Name & Title: __________________________</p>
+    <p>Date: __________________________</p>
 
-<div class="nav">
-<button onclick="prev()">← Back</button>
-</div>
-</div>
+    <div class="footer">
+      <span>Document Ref: HN-2026-INV</span>
+      <span>Page 1 of 4</span>
+    </div>
+
+    <div class="nav">
+      <button class="small" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="page">
+    <div class="stamp">CONFIDENTIAL</div>
+
+    <div class="header">
+      <h1>Investment Withdrawal Deed</h1>
+    </div>
+
+    <p><strong>Contract Date:</strong> February 3, 2026</p>
+
+    <p>This Agreement formalizes the withdrawal of funds between the Client and the undersigned Guarantor.</p>
+
+    <p><strong>Sent To:</strong><br>
+      Gary and Rita Thomas<br>
+      101 W Palma Dr<br>
+      Green Valley, AZ 85614-4214
+    </p>
+
+    <p><strong>Guarantor:</strong> Justin Utz Eugene</p>
+
+    <table>
+      <tr><th>Description</th><th>Amount (USD)</th></tr>
+      <tr><td>Investment Withdrawal Deed</td><td>$773,460.00</td></tr>
+    </table>
+
+    <p><strong>Processing Timeline:</strong> Funds processed within 2–3 weeks of execution.</p>
+    <p><strong>Late Fee Clause:</strong> Delays beyond stated processing time may incur penalties permitted under governing regulations.</p>
+    <p><strong>Confidentiality:</strong> All financial and contractual information remains confidential.</p>
+    <p><strong>Governing Law:</strong> State of Arizona.</p>
+
+    <p><strong>Payment Instructions:</strong><br>
+      Bank Name: American Express (Amex)<br>
+      Account Number: 400214183719<br>
+      Routing Number: 124303243
+    </p>
+
+    <p>Client Signature: __________________________</p>
+    <hr>
+    <p>Guarantor Signature: _______________________</p>
+
+    <div class="footer">
+      <span>Document Ref: INV-2026-001</span>
+      <span>Page 2 of 4</span>
+    </div>
+
+    <div class="nav">
+      <button class="small" onclick="prev()">← Back</button>
+      <button class="small" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div class="page">
+    <div class="stamp">CONFIDENTIAL</div>
+
+    <div class="header">
+      <h1>Updated Investment Withdrawal Deed and Final Closure of the Investment Account</h1>
+    </div>
+
+    <p><strong>BILL TO</strong><br>
+      Gary John Thomas<br>
+      101 W PALMA DR<br>
+      GREEN VALLEY, AZ 85614-4214
+    </p>
+
+    <hr>
+
+    <p><strong>WITHDRAWAL SUMMARY</strong></p>
+    <p style="font-size:24px;"><strong>$849,479.00</strong></p>
+    <p>(Eight Hundred Forty-Nine Thousand Four Hundred Seventy-Nine Dollars Only)</p>
+
+    <p><strong>Processing Timeline:</strong> 7 Business Days</p>
+
+    <hr>
+
+    <p><strong>FEE BREAKDOWN</strong></p>
+    <table>
+      <tr><th>Item</th><th>Amount</th></tr>
+      <tr><td>International Withdrawal Fee</td><td>$4,247.395</td></tr>
+      <tr><td>VAT</td><td>$2,123.50</td></tr>
+      <tr><td>Processing Fee</td><td>Null</td></tr>
+      <tr><td>Interest</td><td>$1,129.50</td></tr>
+    </table>
+
+    <div class="footer">
+      <span>Document Ref: INV-2026-002</span>
+      <span>Page 3 of 4</span>
+    </div>
+
+    <div class="nav">
+      <button class="small" onclick="prev()">← Back</button>
+      <button class="small" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 4 -->
+  <div class="page">
+    <div class="stamp">CONFIDENTIAL</div>
+
+    <div class="header">
+      <h1>Transcript of Total Investment Withdrawal Process</h1>
+    </div>
+
+    <p class="clause">
+      This section provides a formal summary of the procedural steps undertaken in relation to the submitted investment withdrawal request.
+      It reflects administrative, compliance, and verification stages required prior to final disbursement.
+    </p>
+
+    <h3>PROCESS OVERVIEW</h3>
+
+    <p class="clause"><strong>4.1 Submission Record.</strong> The withdrawal request has been formally submitted and recorded.</p>
+    <p class="clause"><strong>4.2 Compliance Review.</strong> Subject to identity verification and regulatory review.</p>
+    <p class="clause"><strong>4.3 Financial Reconciliation.</strong> All previously disclosed charges and tax considerations are accounted for.</p>
+    <p class="clause"><strong>4.4 Asset Position Confirmation.</strong> Account reflects all reconciled transactions.</p>
+    <p class="clause"><strong>4.5 Processing Status.</strong> Upon completion, the request proceeds to final settlement.</p>
+
+    <h3>IMPORTANT NOTICE</h3>
+    <p class="clause">All processes are conducted strictly through authorized institutional channels.</p>
+    <p class="clause">This transcript does not introduce new obligations beyond the governing agreement.</p>
+
+    <div class="footer">
+      <span>Document Ref: INV-2026-003</span>
+      <span>Page 4 of 4</span>
+    </div>
+
+    <div class="nav">
+      <button class="small" onclick="prev()">← Back</button>
+    </div>
+  </div>
 
 </div>
 
@@ -188,28 +363,59 @@ const USER="Gary rita Thomas";
 const PASS="8248";
 
 function login(){
-if(document.getElementById("u").value==USER &&
-   document.getElementById("p").value==PASS){
- document.getElementById("login").style.display="none";
- document.getElementById("content").style.display="block";
-}else{
- document.getElementById("error").innerText="Invalid credentials";
-}
+  if(document.getElementById("u").value===USER && document.getElementById("p").value===PASS){
+    document.getElementById("login").style.display="none";
+    document.getElementById("content").style.display="block";
+  } else {
+    document.getElementById("error").innerText="Invalid credentials";
+  }
 }
 
 let i=0;
 const pages=document.querySelectorAll(".page");
 
 function show(n){
-pages.forEach(p=>p.classList.remove("active"));
-pages[n].classList.add("active");
-document.getElementById("step").innerText="Step "+(n+1)+" of 3";
+  if(n<0 || n>=pages.length) return;
+  i=n;
+  pages.forEach(p=>p.classList.remove("active"));
+  pages[i].classList.add("active");
+  document.getElementById("step").innerText=`Step ${i+1} of ${pages.length}`;
 }
 
-function next(){i++; show(i);}
-function prev(){i--; show(i);}
+function next(){ if(i < pages.length-1) show(i+1); }
+function prev(){ if(i > 0) show(i-1); }
 
 window.onload=()=>show(0);
+
+// PDF download
+async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p','mm','a4');
+  const pages = document.querySelectorAll('.page');
+
+  let lastIndex = i;
+
+  for (let idx = 0; idx < pages.length; idx++) {
+    pages.forEach(p => p.style.display="none");
+    pages[idx].style.display="block";
+
+    await new Promise(r => setTimeout(r, 300));
+
+    const canvas = await html2canvas(pages[idx], { scale:2, useCORS:true });
+    const img = canvas.toDataURL('image/png');
+
+    const imgWidth = 210;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+    if (idx !== 0) pdf.addPage();
+    pdf.addImage(img, 'PNG', 0, 0, imgWidth, imgHeight);
+  }
+
+  pdf.save("Investment_Document.pdf");
+
+  pages.forEach(p => p.style.display="");
+  show(lastIndex);
+}
 </script>
 
 </body>
