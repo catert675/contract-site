@@ -1,26 +1,215 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Client Portal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+
+<style>
+body {margin:0; font-family:Inter; background:#f4efe6;}
+
+/* LOGIN */
+#login {
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1600') center/cover;
+}
+
+.login-box {
+background:white;
+padding:40px;
+border-radius:12px;
+width:300px;
+text-align:center;
+}
+
+input {width:100%; padding:10px; margin-top:10px;}
+
+button {
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#2f3e52;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+/* CONTENT */
+#content {display:none; padding:20px;}
+
+.page {
+display:none;
+background:white;
+padding:30px;
+max-width:850px;
+margin:auto;
+border-radius:10px;
+}
+
+.page.active {display:block;}
+
+.progress {
+text-align:center;
+margin-bottom:10px;
+color:#2f3e52;
+}
+
+.section-title {
+font-size:13px;
+text-transform:uppercase;
+margin-top:20px;
+font-weight:600;
+color:#2f3e52;
+}
+
+.doc-table {
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+.doc-table th {
+background:#2f3e52;
+color:white;
+padding:10px;
+}
+
+.doc-table td {
+border:1px solid #ddd;
+padding:10px;
+}
+
+.nav {margin-top:20px;}
+.nav button {width:auto; margin-right:10px;}
+
+h1 {font-family:"Cormorant Garamond";}
+
+</style>
+</head>
+
 <body>
 
-<h2>Login</h2>
+<!-- LOGIN -->
+<div id="login">
+<div class="login-box">
+<h2>Confidential Access Required</h2>
+<input id="u" placeholder="Username">
+<input id="p" type="password" placeholder="Password">
+<button onclick="login()">Access Secure Document</button>
+<p id="error"></p>
+</div>
+</div>
 
-<input id="u" placeholder="Username"><br><br>
-<input id="p" type="password" placeholder="Password"><br><br>
+<!-- CONTENT -->
+<div id="content">
 
-<button onclick="login()">Login</button>
+<div class="progress" id="step">Step 1 of 3</div>
 
-<div id="content" style="display:none;">
-<h1>SUCCESS ✅</h1>
-<p>Your site is working</p>
+<!-- PAGE 1 -->
+<div class="page active">
+<h1>Acknowledgment</h1>
+<p>This document is presented for review and acknowledgment.</p>
+<button onclick="next()">Next →</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+<h1>FINAL INVESTMENT WITHDRAWAL DEED</h1>
+<p>Date: February 3, 2026</p>
+
+<hr>
+
+<div class="section-title">BILL TO</div>
+Gary rita Thomas<br>
+[Insert Address]
+
+<hr>
+
+<div class="section-title">SERVICE DETAILS</div>
+
+<table class="doc-table">
+<tr><th>Description</th><th>Amount</th></tr>
+<tr><td>Investment Withdrawal</td><td>$773,460.00</td></tr>
+</table>
+
+<div class="nav">
+<button onclick="prev()">← Back</button>
+<button onclick="next()">Next →</button>
+</div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+<h1>FINAL INVESTMENT WITHDRAWAL DEED</h1>
+<p>Date: March 27, 2026</p>
+
+<hr>
+
+<div class="section-title">BILL TO</div>
+Gary rita Thomas<br>
+[Insert Address]
+
+<hr>
+
+<div class="section-title">WITHDRAWAL SUMMARY</div>
+
+<p><strong>$849,479.00</strong><br>
+(Eight Hundred Forty-Nine Thousand Four Hundred Seventy-Nine Dollars Only)</p>
+
+<p><strong>Processing Timeline:</strong> 7 Business Days</p>
+
+<hr>
+
+<div class="section-title">FEE BREAKDOWN</div>
+
+<table class="doc-table">
+<tr><th>Item</th><th>Amount</th></tr>
+<tr><td>International Withdrawal Fee</td><td>$4,247.395</td></tr>
+<tr><td>VAT</td><td>$2,123.50</td></tr>
+<tr><td>Processing Fee</td><td>Null</td></tr>
+<tr><td>Interest</td><td>$1,129.50</td></tr>
+</table>
+
+<div class="nav">
+<button onclick="prev()">← Back</button>
+</div>
+</div>
+
 </div>
 
 <script>
+const USER="Gary rita Thomas";
+const PASS="8248";
+
 function login(){
- if(document.getElementById("u").value=="Gary rita Thomas" &&
-    document.getElementById("p").value=="8248"){
-   document.getElementById("content").style.display="block";
- }
+if(document.getElementById("u").value==USER &&
+   document.getElementById("p").value==PASS){
+ document.getElementById("login").style.display="none";
+ document.getElementById("content").style.display="block";
+}else{
+ document.getElementById("error").innerText="Invalid credentials";
 }
+}
+
+let i=0;
+const pages=document.querySelectorAll(".page");
+
+function show(n){
+pages.forEach(p=>p.classList.remove("active"));
+pages[n].classList.add("active");
+document.getElementById("step").innerText="Step "+(n+1)+" of 3";
+}
+
+function next(){i++; show(i);}
+function prev(){i--; show(i);}
+
+window.onload=()=>show(0);
 </script>
 
 </body>
